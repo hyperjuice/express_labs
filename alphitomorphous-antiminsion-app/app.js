@@ -1,3 +1,4 @@
+// Require all of our modules
 var express = require('express');
 var bodyParser = require('body-parser'),
 	ejs = require('ejs'),
@@ -5,8 +6,10 @@ var bodyParser = require('body-parser'),
 	pg = require("pg"),
 	session = require("express-session");
 
-
 var app = express();
+
+// Require Sequelize 
+var db = require("./models");
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -17,8 +20,30 @@ app.use(session({
   saveUninitialized: true
 }))
 
-// Refactor connection and query code
-var db = require("./models");
+app.use("/", function (req, res, next) {
+
+  req.login = function (user) {
+    req.session.userId = user.id;
+  };
+
+  req.currentUser = function () {
+    return db.User
+	    .find({ where: { id: req.session.userId }  })
+	    .then(function (user) {
+		    req.user = user;
+		    console.log("The current_user is:", user);
+		    return user;
+	    })
+  };
+
+  req.logout = function () {
+    req.session.userId = null;
+    req.user = null;
+  }
+
+  next(); 
+});
+
 
 app.get('/articles', function(req,res) {
   db.Article
@@ -124,15 +149,28 @@ app.post("/login", function (req, res) {
   db.User
     .authenticate(user.email, user.password)
     .then(function (user) {
-          res.redirect("/users/" + user.id);
+    	// This sets the user who signed in as the currentUser
+    	req.login(user);
+
+    	// Now we redirect to the user "profile"
+        res.redirect("/profile");
     });
 });
 
-// Show user
+// Show current user profile
+
+app.get("/profile", function (req, res) {
+	req.currentUser()
+	    .then(function (user) {
+			res.render("users/user", { ejsUser: user } );
+		});
+});
+
+// Show user by id
 app.get("/users/:id", function(req, res) {
 	db.User.find(req.params.id)
 		.then(function(dbUser) {
-			res.render("users/user.ejs", { ejsUser: dbUser })
+			res.render("users/user", { ejsUser: dbUser })
 		})	
 })
 
