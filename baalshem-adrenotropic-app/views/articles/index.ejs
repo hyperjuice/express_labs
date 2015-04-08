@@ -13,6 +13,9 @@
 <div style="margin-top: 10px;">
   <a href="/articles/<%= article.id %>"><%= article.title %></a><br />
 Author: <a href="/authors/<%= article.Author.id %>"><%= article.Author.first_name  %> <%= article.Author.last_name  %>
+
+<!-- NOTE: if you get an area on line 15 for no apparent reason, it's because you did some deleting of authors and/or articles and there isn't null handling setup -->
+
   <br />
 </div>
   
