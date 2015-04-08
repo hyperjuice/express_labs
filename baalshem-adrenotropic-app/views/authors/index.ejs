@@ -4,8 +4,17 @@
 <body>
 <h1>All Authors</h1>
 <% ejsAuthors.forEach(function(author) { %>
+<div style="margin-top: 10px;">
+  <a href="/authors/<%= author.id %>"><%= author.first_name %> <%= author.last_name  %></a><br />
+</div>
+
 <div>
-  <a href="/authors/<%= author.id %>"><%= author.first_name %> <%= author.last_name  %></a>
+	<a href="/authors/<%= author.id %>/edit">edit</a>
+
+</div>
+<div>
+  <form method="POST" action="/authors/<%= author.id %>?_method=DELETE">
+  	<button>Delete</button>
 </div>
 <% }) %>
 </body>

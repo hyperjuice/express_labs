@@ -12,9 +12,20 @@
 <% articlesList.forEach(function(article) { %>
 <div style="margin-top: 10px;">
   <a href="/articles/<%= article.id %>"><%= article.title %></a><br />
-  Author: <%= article.Author.first_name  %> <%= article.Author.last_name  %>
+Author: <a href="/authors/<%= article.Author.id %>"><%= article.Author.first_name  %> <%= article.Author.last_name  %>
   <br />
 </div>
+  
+  <div>
+	<a href="/articles/<%= article.id %>/edit">edit</a>
+
+</div>
+<div>
+  <form method="POST" action="/articles/<%= article.id %>?_method=DELETE">
+  	<button>Delete</button>
+</div>
+
+
 <% }) %>
 
 
