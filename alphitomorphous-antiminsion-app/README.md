@@ -9,7 +9,7 @@ Just like last night, this repo has two branches: `master` and `solutions`. Solu
 
 For those who weren't clear on how to switch branches last night (if you want to peek at the solution or open the solution with `nodemon`), here's a quick tutorial:
 
-After forking and cloning the repo:
+After forking and cloning the repo (or if you already did that last night, just make sure that before running the command below you have `cd`'d into the `express_labs` directory that was created when you cloned the repository).
 
 ```bash
 git branch solutions origin/solutions # Creates a local branch that contains the solution I created
